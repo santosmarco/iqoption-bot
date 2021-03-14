@@ -1,0 +1,22 @@
+{
+  "name": "node-project",
+  "version": "1.0.0",
+  "author": "Your Name <your@email.com> (https://yourwebsite.com)",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "./node_modules/concurrently/bin/concurrently.js \"./node_modules/typescript/bin/tsc -w\" \"./node_modules/nodemon/bin/nodemon dist/index.js\"",
+    "build": "rm -rf dist && tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "concurrently": "^6.0.0",
+    "nodemon": "^2.0.7",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "moment": "^2.29.1",
+    "ora": "^5.3.0",
+    "puppeteer": "^8.0.0"
+  }
+}
