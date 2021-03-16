@@ -18,9 +18,9 @@ export default class IQSignal {
     return this.pair.join("/");
   }
 
-  get time() {
+  getTime = () => {
     const momentObj = this._time;
-    const remaining = moment().diff(momentObj);
+    const remaining = momentObj.diff(moment());
 
     return {
       moment: momentObj,
@@ -30,7 +30,7 @@ export default class IQSignal {
       remaining,
       hasPassed: remaining <= 0,
     };
-  }
+  };
 
   static parse = (text: string) => {
     const matches = [
@@ -47,6 +47,7 @@ export default class IQSignal {
             time: moment(match[4]!, "HH:mm:ss"),
             action: match[5] as "CALL" | "PUT",
           })
-      );
+      )
+      .filter((signal) => !signal.getTime().hasPassed);
   };
 }
