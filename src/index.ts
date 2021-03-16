@@ -21,30 +21,34 @@ bot.connect(
     );
 
     telegram.on("message", async (ctx) => {
-      if (SIGNALS.length > 0) {
-        ctx.reply("Bot is already running.");
-      } else {
-        // @ts-ignore
-        SIGNALS = IQSignal.parse(ctx.message.text);
-        if (SIGNALS.length === 0) {
-          ctx.reply("No future signals found.");
+      try {
+        if (SIGNALS.length > 0) {
+          ctx.reply("Bot is already running.");
         } else {
-          ctx.reply(
-            `Found ${SIGNALS.length} future signals:\n• ${SIGNALS.map(
-              (signal) =>
-                `${signal.name} (${signal.getTime().moment.format("HH:mm:ss")})`
-            ).join("\n• ")}`
-          );
-          for (let i = 0; i < SIGNALS.length; i++) {
-            const signal = SIGNALS[i]!;
-            ctx.reply(`[SIGNAL] Running: ${signal.name}...`);
-            await bot.runSignal(signal);
-            ctx.reply(`[SIGNAL] Done: ${signal.name}.`);
+          // @ts-ignore
+          SIGNALS = IQSignal.parse(ctx.message.text);
+          if (SIGNALS.length === 0) {
+            ctx.reply("No future signals found.");
+          } else {
+            ctx.reply(
+              `Found ${SIGNALS.length} future signals:\n• ${SIGNALS.map(
+                (signal) =>
+                  `${signal.name} (${signal
+                    .getTime()
+                    .moment.format("HH:mm:ss")})`
+              ).join("\n• ")}`
+            );
+            for (let i = 0; i < SIGNALS.length; i++) {
+              const signal = SIGNALS[i]!;
+              ctx.reply(`[SIGNAL] Running: ${signal.name}...`);
+              await bot.runSignal(signal);
+              ctx.reply(`[SIGNAL] Done: ${signal.name}.`);
+            }
+            ctx.reply("Bot has ran all signals successfully.");
+            SIGNALS = [];
           }
-          ctx.reply("Bot has ran all signals successfully.");
-          SIGNALS = [];
         }
-      }
+      } catch (e) {}
     });
 
     telegram.launch();
